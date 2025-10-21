@@ -1,0 +1,124 @@
+@{
+    ViewBag.Title = "Hoş Geldiniz";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .landing-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    
+    .landing-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        padding: 40px;
+        max-width: 450px;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .logo-container {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .logo-icon {
+        width: 50px;
+        height: 50px;
+        fill: white;
+    }
+    
+    .landing-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .landing-subtitle {
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+    
+    .landing-buttons {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .btn-landing {
+        flex: 1;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn-login {
+        background: #667eea;
+        color: white;
+    }
+    
+    .btn-login:hover {
+        background: #5a6fd8;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .btn-register {
+        background: #28a745;
+        color: white;
+    }
+    
+    .btn-register:hover {
+        background: #218838;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .copyright {
+        color: #999;
+        font-size: 14px;
+    }
+</style>
+
+<div class="landing-container">
+    <div class="landing-card">
+        <div class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 24 24">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                <circle cx="12" cy="12" r="3" fill="none" stroke="white" stroke-width="2"/>
+                <path d="M12 9v3l2 2" stroke="white" stroke-width="2" fill="none"/>
+            </svg>
+        </div>
+        
+        <h1 class="landing-title">İzMes</h1>
+        <p class="landing-subtitle">Bilgilerinizi görmek için lütfen giriş yapın veya hesap oluşturun.</p>
+        
+        <div class="landing-buttons">
+            <a href="@Url.Action("Login", "Account")" class="btn-landing btn-login">Giriş Yap</a>
+            <a href="@Url.Action("Register", "Account")" class="btn-landing btn-register">Kayıt Ol</a>
+        </div>
+        
+        <div class="copyright">© 2025</div>
+    </div>
+</div>

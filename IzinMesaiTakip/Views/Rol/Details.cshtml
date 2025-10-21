@@ -1,0 +1,173 @@
+@model IzinMesaiTakip.Models.Rol
+
+@{
+    ViewBag.Title = "Rol Detayları";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Rol Detayları</h4>
+                    <div>
+                        <a href="/Rol/Edit/@Model.RolID" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Düzenle
+                        </a>
+                        <a href="/Rol/Index" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Geri
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Rol Bilgileri</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td width="150"><strong>Rol ID:</strong></td>
+                                    <td><span class="badge badge-info">@Model.RolID</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rol Adı:</strong></td>
+                                    <td><span class="font-weight-bold">@Model.RolAdi</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kullanıcı Sayısı:</strong></td>
+                                    <td>
+                                        <span class="badge badge-@(Model.Kullanici.Count > 0 ? "success" : "secondary")">
+                                            @Model.Kullanici.Count kullanıcı
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">İstatistikler</h6>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="card bg-primary text-white">
+                                        <div class="card-body text-center">
+                                            <h3>@Model.Kullanici.Count</h3>
+                                            <small>Toplam Kullanıcı</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card bg-success text-white">
+                                        <div class="card-body text-center">
+                                            <h3>@Model.Kullanici.Count(k => k.Aktif == true)</h3>
+                                            <small>Aktif Kullanıcı</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-primary">Bu Role Sahip Kullanıcılar</h6>
+                            @if (Model.Kullanici.Count > 0)
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Ad Soyad</th>
+                                                <th>E-posta</th>
+                                                <th>Departman</th>
+                                                <th>Durum</th>
+                                                <th>İşlemler</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var kullanici in Model.Kullanici)
+                                            {
+                                                <tr>
+                                                    <td>@kullanici.KullaniciID</td>
+                                                    <td>
+                                                        <i class="fas fa-user"></i>
+                                                        @kullanici.Ad @kullanici.Soyad
+                                                    </td>
+                                                    <td>
+                                                        <i class="fas fa-envelope"></i>
+                                                        @kullanici.Email
+                                                    </td>
+                                                    <td>
+                                                        @if (kullanici.Departman != null)
+                                                        {
+                                                            <span class="badge badge-info">
+                                                                @kullanici.Departman.DepartmanAdi
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">-</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (kullanici.Aktif == true)
+                                                        {
+                                                            <span class="badge badge-success">
+                                                                <i class="fas fa-check"></i> Aktif
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge badge-danger">
+                                                                <i class="fas fa-times"></i> Pasif
+                                                            </span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <a href="/Kullanici/Details/@kullanici.KullaniciID" 
+                                                               class="btn btn-info btn-sm">
+                                                                <i class="fas fa-eye"></i>
+                                                            </a>
+                                                            <a href="/Kullanici/Edit/@kullanici.KullaniciID" 
+                                                               class="btn btn-warning btn-sm">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    Bu role sahip kullanıcı bulunmuyor.
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sayfa yüklendiğinde animasyonlar
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tablo satırlarına hover efekti
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+            });
+        });
+    });
+</script> 

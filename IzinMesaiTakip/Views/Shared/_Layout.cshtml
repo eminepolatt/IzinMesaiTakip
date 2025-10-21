@@ -1,0 +1,162 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>İzin Mesai Takip</title>
+
+    <!-- Tema stil dosyası -->
+    <link href="~/Content/sb-admin-2.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome ikonlar için -->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+</head>
+<body id="page-top">
+
+    <!-- Sayfa genel sarmalayıcısı -->
+    <div id="wrapper">
+
+        <!-- Sol menü (Sidebar) -->
+        @if (Session["KullaniciAdi"] != null)
+        {
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Logo ve başlık -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+                <div class="sidebar-brand-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                        <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                        <circle cx="12" cy="12" r="3" fill="none" stroke="white" stroke-width="2"/>
+                        <path d="M12 9v3l2 2" stroke="white" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+                <div class="sidebar-brand-text mx-3">İzinMesaiTakip</div>
+            </a>
+
+            <hr class="sidebar-divider my-0" />
+
+            <!-- Ana Sayfa Menü Öğesi -->
+            <li class="nav-item">
+                <a class="nav-link" href="/">
+                    <i class="fas fa-home"></i>
+                    <span>Ana Sayfa</span>
+                </a>
+            </li>
+
+            @if (Session["RolAdi"]?.ToString() == "Yönetici" || Session["RolAdi"]?.ToString() == "Admin")
+            {
+                <!-- Menü öğesi: Kullanıcılar (Sadece Yönetici) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Kullanici">
+                        <i class="fas fa-users"></i>
+                        <span>Kullanıcılar</span>
+                    </a>
+                </li>
+            }
+            <!-- Menü öğesi: izin -->
+            <li class="nav-item">
+                <a class="nav-link" href="/Izin">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>İzinler</span>
+                </a>
+            </li>
+            <!-- Menü öğesi: izin -->
+            <li class="nav-item">
+                <a class="nav-link" href="/FazlaMesai/Index">
+                    <i class="fas fa-clock"></i>
+                    <span>Fazla Mesai</span>
+                </a>
+            </li>
+            @if (Session["RolAdi"]?.ToString() == "Yönetici" || Session["RolAdi"]?.ToString() == "Admin")
+            {
+                <!-- Yönetim Paneli (Sadece Yönetici) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Yonetim">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Yönetim Paneli</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+        }
+        <!-- Sol menü sonu -->
+        <!-- Sağ içerik alanı -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Ana içerik -->
+            <div id="content">
+
+                <!-- Üst menü (Topbar) -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <span class="navbar-brand">İzMes</span>
+                    
+                    @if (Session["KullaniciAdi"] != null)
+                    {
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item dropdown no-arrow">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">@Session["KullaniciAdi"]</span>
+                                    <i class="fas fa-user-circle fa-fw"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+                                    <a class="dropdown-item" href="/Account/Logout">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Çıkış Yap
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <!-- Giriş yapmamış kullanıcılar için üst menüde buton yok -->
+                    }
+                </nav>
+                <!-- Üst menü sonu -->
+                <!-- Sayfa içeriği -->
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+                <!-- Sayfa içeriği sonu -->
+
+            </div>
+            <!-- Ana içerik sonu -->
+            <!-- Alt bilgi (footer) -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>© @DateTime.Now.Year - İzinMesaiTakip Projesi</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- Footer sonu -->
+
+        </div>
+        <!-- Sağ içerik alanı sonu -->
+
+    </div>
+    <!-- Sayfa sarmalayıcı sonu -->
+    <!-- Sayfa başına git butonu -->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- JS dosyaları -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/Scripts/sb-admin-2.min.js"></script>
+
+    <!-- jQuery ve Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

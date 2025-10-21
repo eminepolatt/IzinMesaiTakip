@@ -1,0 +1,60 @@
+﻿@model IzinMesaiTakip.Models.Izin
+
+@{
+    ViewBag.Title = "İzin Detayları";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">İzin Detayları</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Kayıt Bilgisi</h6>
+        </div>
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-sm-3 font-weight-bold">Ad Soyad:</div>
+                <div class="col-sm-9">@Model.Kullanici.Ad @Model.Kullanici.Soyad</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-3 font-weight-bold">İzin Türü:</div>
+                <div class="col-sm-9">@Model.IzinTur.TurAdi</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-3 font-weight-bold">Başlangıç Tarihi:</div>
+                <div class="col-sm-9">@(Model.BaslangicTarih?.ToString("dd.MM.yyyy"))</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-3 font-weight-bold">Bitiş Tarihi:</div>
+                <div class="col-sm-9">@(Model.BitisTarih?.ToString("dd.MM.yyyy"))</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-3 font-weight-bold">Açıklama:</div>
+                <div class="col-sm-9">@Model.Aciklama</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-3 font-weight-bold">Durum:</div>
+                <div class="col-sm-9">
+                    @if (Model.Durum == true)
+                    {
+                        <span class="badge badge-success">Onaylandı</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning">Bekliyor</span>
+                    }
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-3 font-weight-bold">Oluşturma Tarihi:</div>
+                <div class="col-sm-9">@(Model.OlusturmaTarihi?.ToString("dd.MM.yyyy HH:mm"))</div>
+            </div>
+
+            <hr />
+
+            <a href="/Izin/Edit/@Model.IzinID" class="btn btn-warning">Düzenle</a>
+            <a href="/Izin/Index" class="btn btn-secondary ml-2">Geri Dön</a>
+        </div>
+    </div>
+</div>

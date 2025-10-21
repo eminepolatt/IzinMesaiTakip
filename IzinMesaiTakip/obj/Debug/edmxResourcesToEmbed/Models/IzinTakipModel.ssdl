@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="IzinMesaiTakipModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Departman">
+    <Key>
+      <PropertyRef Name="DepartmanID" />
+    </Key>
+    <Property Name="DepartmanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DepartmanAdi" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="FazlaMesai">
+    <Key>
+      <PropertyRef Name="MesaiID" />
+    </Key>
+    <Property Name="MesaiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KullaniciID" Type="int" />
+    <Property Name="Tarih" Type="date" />
+    <Property Name="Saat" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="Aciklama" Type="nvarchar" MaxLength="500" />
+    <Property Name="Durum" Type="bit" />
+    <Property Name="OlusturmaTarihi" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Izin">
+    <Key>
+      <PropertyRef Name="IzinID" />
+    </Key>
+    <Property Name="IzinID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KullaniciID" Type="int" />
+    <Property Name="IzinTurID" Type="int" />
+    <Property Name="BaslangicTarih" Type="date" />
+    <Property Name="BitisTarih" Type="date" />
+    <Property Name="Aciklama" Type="nvarchar" MaxLength="500" />
+    <Property Name="Durum" Type="bit" />
+    <Property Name="OlusturmaTarihi" Type="datetime" />
+    <Property Name="DurumTemp" Type="bit" />
+    <Property Name="DurumBit" Type="bit" />
+  </EntityType>
+  <EntityType Name="IzinTur">
+    <Key>
+      <PropertyRef Name="IzinTurID" />
+    </Key>
+    <Property Name="IzinTurID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TurAdi" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Kullanici">
+    <Key>
+      <PropertyRef Name="KullaniciID" />
+    </Key>
+    <Property Name="KullaniciID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Ad" Type="nvarchar" MaxLength="100" />
+    <Property Name="Soyad" Type="nvarchar" MaxLength="100" />
+    <Property Name="Eposta" Type="nvarchar" MaxLength="100" />
+    <Property Name="Sifre" Type="nvarchar" MaxLength="100" />
+    <Property Name="RolID" Type="int" />
+    <Property Name="DepartmanID" Type="int" />
+  </EntityType>
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="RolID" />
+    </Key>
+    <Property Name="RolID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RolAdi" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK__FazlaMesa__Kulla__32E0915F">
+    <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+    <End Role="FazlaMesai" Type="Self.FazlaMesai" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kullanici">
+        <PropertyRef Name="KullaniciID" />
+      </Principal>
+      <Dependent Role="FazlaMesai">
+        <PropertyRef Name="KullaniciID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Izin__IzinTurID__2F10007B">
+    <End Role="IzinTur" Type="Self.IzinTur" Multiplicity="0..1" />
+    <End Role="Izin" Type="Self.Izin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IzinTur">
+        <PropertyRef Name="IzinTurID" />
+      </Principal>
+      <Dependent Role="Izin">
+        <PropertyRef Name="IzinTurID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Izin__KullaniciI__2E1BDC42">
+    <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+    <End Role="Izin" Type="Self.Izin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kullanici">
+        <PropertyRef Name="KullaniciID" />
+      </Principal>
+      <Dependent Role="Izin">
+        <PropertyRef Name="KullaniciID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Kullanici__Depar__29572725">
+    <End Role="Departman" Type="Self.Departman" Multiplicity="0..1" />
+    <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Departman">
+        <PropertyRef Name="DepartmanID" />
+      </Principal>
+      <Dependent Role="Kullanici">
+        <PropertyRef Name="DepartmanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Kullanici__RolID__286302EC">
+    <End Role="Rol" Type="Self.Rol" Multiplicity="0..1" />
+    <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="RolID" />
+      </Principal>
+      <Dependent Role="Kullanici">
+        <PropertyRef Name="RolID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="IzinMesaiTakipModelStoreContainer">
+    <EntitySet Name="Departman" EntityType="Self.Departman" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FazlaMesai" EntityType="Self.FazlaMesai" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Izin" EntityType="Self.Izin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IzinTur" EntityType="Self.IzinTur" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Kullanici" EntityType="Self.Kullanici" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__FazlaMesa__Kulla__32E0915F" Association="Self.FK__FazlaMesa__Kulla__32E0915F">
+      <End Role="Kullanici" EntitySet="Kullanici" />
+      <End Role="FazlaMesai" EntitySet="FazlaMesai" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Izin__IzinTurID__2F10007B" Association="Self.FK__Izin__IzinTurID__2F10007B">
+      <End Role="IzinTur" EntitySet="IzinTur" />
+      <End Role="Izin" EntitySet="Izin" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Izin__KullaniciI__2E1BDC42" Association="Self.FK__Izin__KullaniciI__2E1BDC42">
+      <End Role="Kullanici" EntitySet="Kullanici" />
+      <End Role="Izin" EntitySet="Izin" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Kullanici__Depar__29572725" Association="Self.FK__Kullanici__Depar__29572725">
+      <End Role="Departman" EntitySet="Departman" />
+      <End Role="Kullanici" EntitySet="Kullanici" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Kullanici__RolID__286302EC" Association="Self.FK__Kullanici__RolID__286302EC">
+      <End Role="Rol" EntitySet="Rol" />
+      <End Role="Kullanici" EntitySet="Kullanici" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

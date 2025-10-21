@@ -1,0 +1,261 @@
+﻿@model IEnumerable<IzinMesaiTakip.Models.Kullanici>
+@{
+    ViewBag.Title = "Kullanıcılar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Kullanıcılar</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Kullanıcı Listesi</h6>
+            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#ekleModal">Yeni Kullanıcı</button>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Ad Soyad</th>
+                        <th>E-Posta</th>
+                        <th>Rol</th>
+                        <th>Departman</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Ad @item.Soyad</td>
+                            <td>@item.Eposta</td>
+                            <td>@(item.Rol != null ? item.Rol.RolAdi : "-")</td>
+                            <td>@(item.Departman != null ? item.Departman.DepartmanAdi : "-")</td>
+
+                            <td>
+                                <button class="btn btn-warning btn-sm btnDuzenle"
+                                        data-id="@item.KullaniciID">
+                                    Düzenle
+                                </button>
+
+                                <button class="btn btn-danger btn-sm btnSil"
+                                        data-id="@item.KullaniciID"
+                                        data-ad="@item.Ad">
+                                    Sil
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Ekle Modal -->
+<div class="modal fade" id="ekleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="ekleForm">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Yeni Kullanıcı Ekle</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="Ad" class="form-control mb-2" placeholder="Ad" required />
+                    <input type="text" name="Soyad" class="form-control mb-2" placeholder="Soyad" required />
+                    <input type="email" name="Eposta" class="form-control mb-2" placeholder="E-Posta" required />
+                    <input type="password" name="Sifre" class="form-control mb-2" placeholder="Şifre" required />
+                    <select name="RolID" class="form-control mb-2" id="rolSelectEkle"></select>
+                    <select name="DepartmanID" class="form-control mb-2" id="departmanSelectEkle"></select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Güncelle Modal -->
+<div class="modal fade" id="guncelleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="guncelleForm">
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title">Kullanıcı Güncelle</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="KullaniciID" id="kullaniciID" />
+                    <input type="text" name="Ad" id="ad" class="form-control mb-2" placeholder="Ad" required />
+                    <input type="text" name="Soyad" id="soyad" class="form-control mb-2" placeholder="Soyad" required />
+                    <input type="email" name="Eposta" id="email" class="form-control mb-2" placeholder="E-Posta" required />
+                    <input type="password" name="Sifre" id="sifre" class="form-control mb-2" placeholder="Şifre" required />
+                    <select name="RolID" id="rolSelectGuncelle" class="form-control mb-2"></select>
+                    <select name="DepartmanID" id="departmanSelectGuncelle" class="form-control mb-2"></select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Sayfa yüklendiğinde dropdown'ları doldur
+            loadDropdowns();
+
+            // Ekle
+            $("#ekleForm").submit(function (e) {
+                e.preventDefault();
+                $.post("/Kullanici/Create", $(this).serialize(), function (result) {
+                    if (result.success) {
+                        $("#ekleModal").modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Ekleme hatası: " + (result.message || "Bilinmeyen hata"));
+                    }
+                }).fail(function () {
+                    alert("Ekleme hatası.");
+                });
+            });
+
+            // Güncelle
+            $("#guncelleForm").submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/Kullanici/Edit',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        if (result.success) {
+                            $("#guncelleModal").modal('hide');
+                            location.reload();
+                        } else {
+                            alert("Güncelleme hatası: " + (result.message || "Bilinmeyen hata"));
+                        }
+                    },
+                    error: function () {
+                        alert("Güncelleme hatası.");
+                    }
+                });
+            });
+
+            // Sil
+            $(document).on("click", ".btnSil", function () {
+                let id = $(this).data("id");
+                let ad = $(this).data("ad");
+                let token = $('input[name="__RequestVerificationToken"]').val();
+
+                if (confirm(ad + " adlı kullanıcı silinsin mi?")) {
+                    $.ajax({
+                        url: '/Kullanici/DeleteConfirmed',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            __RequestVerificationToken: token
+                        },
+                        success: function (result) {
+                            if (result.success) {
+                                location.reload();
+                            } else {
+                                alert(result.message || "Silme başarısız.");
+                            }
+                        },
+                        error: function () {
+                            alert("Silme hatası.");
+                        }
+                    });
+                }
+            });
+
+            // Güncelle butonuna tıklanınca
+            $(document).on("click", ".btnDuzenle", function () {
+                var id = $(this).data("id");
+
+                                                  // Kullanıcı bilgilerini çek
+                 $.ajax({
+                     url: '/Kullanici/GetKullanici/' + id,
+                     type: 'GET',
+                     success: function (data) {
+                         if (data && !data.error) {
+                            $("#kullaniciID").val(data.KullaniciID);
+                            $("#ad").val(data.Ad || '');
+                            $("#soyad").val(data.Soyad || '');
+
+                            $("#email").val(data.Email);
+                            $("#sifre").val(data.Sifre);
+
+                            // Rol dropdown'u doldur
+                            $.get('/Rol/Listele', function (roller) {
+                                var rolSelect = $("#rolSelectGuncelle");
+                                rolSelect.empty();
+                                $.each(roller, function (i, rol) {
+                                    rolSelect.append($('<option>', {
+                                        value: rol.RolID,
+                                        text: rol.RolAdi,
+                                        selected: rol.RolID === data.RolID
+                                    }));
+                                });
+                            });
+
+                            // Departman dropdown'u doldur
+                            $.get('/Departman/Listele', function (departmanlar) {
+                                var departmanSelect = $("#departmanSelectGuncelle");
+                                departmanSelect.empty();
+                                $.each(departmanlar, function (i, dpt) {
+                                    departmanSelect.append($('<option>', {
+                                        value: dpt.DepartmanID,
+                                        text: dpt.DepartmanAdi,
+                                        selected: dpt.DepartmanID === data.DepartmanID
+                                    }));
+                                });
+                            });
+
+                            $("#guncelleModal").modal("show");
+                        }
+                                         },
+                     error: function (xhr, status, error) {
+                         console.log("Hata:", xhr.responseText);
+                         alert("Kullanıcı bilgileri alınamadı: " + error);
+                     }
+                });
+            });
+
+            function loadDropdowns() {
+                // Rol dropdown'larını doldur
+                $.get('/Rol/Listele', function (roller) {
+                    var rolSelectEkle = $("#rolSelectEkle");
+                    rolSelectEkle.empty();
+                    rolSelectEkle.append('<option value="">Rol Seçin</option>');
+                    $.each(roller, function (i, rol) {
+                        rolSelectEkle.append($('<option>', {
+                            value: rol.RolID,
+                            text: rol.RolAdi
+                        }));
+                    });
+                });
+
+                // Departman dropdown'larını doldur
+                $.get('/Departman/Listele', function (departmanlar) {
+                    var departmanSelectEkle = $("#departmanSelectEkle");
+                    departmanSelectEkle.empty();
+                    departmanSelectEkle.append('<option value="">Departman Seçin</option>');
+                    $.each(departmanlar, function (i, dpt) {
+                        departmanSelectEkle.append($('<option>', {
+                            value: dpt.DepartmanID,
+                            text: dpt.DepartmanAdi
+                        }));
+                    });
+                });
+            }
+        });
+    </script>
+}

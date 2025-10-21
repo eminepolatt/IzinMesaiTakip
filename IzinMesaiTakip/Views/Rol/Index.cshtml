@@ -1,0 +1,274 @@
+@model IEnumerable<IzinMesaiTakip.Models.Rol>
+
+@{
+    ViewBag.Title = "Rol Yönetimi";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Rol Listesi</h4>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rolEkleModal">
+                        <i class="fas fa-plus"></i> Yeni Rol Ekle
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Rol Adı</th>
+                                    <th>Kullanıcı Sayısı</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var rol in Model)
+                                {
+                                    <tr>
+                                        <td>@rol.RolID</td>
+                                        <td>@rol.RolAdi</td>
+                                        <td>@rol.Kullanici.Count</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-info btn-sm" 
+                                                        onclick="rolDetay(@rol.RolID, '@rol.RolAdi')">
+                                                    <i class="fas fa-eye"></i> Detay
+                                                </button>
+                                                <button type="button" class="btn btn-warning btn-sm" 
+                                                        onclick="rolDuzenle(@rol.RolID, '@rol.RolAdi')">
+                                                    <i class="fas fa-edit"></i> Düzenle
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-sm" 
+                                                        onclick="rolSil(@rol.RolID, '@rol.RolAdi')">
+                                                    <i class="fas fa-trash"></i> Sil
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rol Ekleme Modal -->
+<div class="modal fade" id="rolEkleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Rol Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form id="rolEkleForm" action="/Rol/Create" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="__RequestVerificationToken" id="rolEkleToken" />
+                    
+                    <div class="form-group">
+                        <label for="rolAdi">Rol Adı</label>
+                        <input type="text" class="form-control" id="rolAdi" name="RolAdi" 
+                               required maxlength="50" placeholder="Rol adını giriniz">
+                        <div class="invalid-feedback">
+                            Rol adı gereklidir ve 50 karakterden az olmalıdır.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Rol Düzenleme Modal -->
+<div class="modal fade" id="rolDuzenleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rol Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form id="rolDuzenleForm" action="/Rol/Edit" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="__RequestVerificationToken" id="rolDuzenleToken" />
+                    <input type="hidden" id="duzenleRolID" name="RolID" />
+                    
+                    <div class="form-group">
+                        <label for="duzenleRolAdi">Rol Adı</label>
+                        <input type="text" class="form-control" id="duzenleRolAdi" name="RolAdi" 
+                               required maxlength="50" placeholder="Rol adını giriniz">
+                        <div class="invalid-feedback">
+                            Rol adı gereklidir ve 50 karakterden az olmalıdır.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Rol Silme Modal -->
+<div class="modal fade" id="rolSilModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rol Sil</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bu rolü silmek istediğinizden emin misiniz?</p>
+                <p><strong>Rol Adı:</strong> <span id="silinecekRolAdi"></span></p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Uyarı:</strong> Bu rolü silmek, bu role sahip kullanıcıları etkileyebilir.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <form id="rolSilForm" action="/Rol/Delete" method="post" style="display: inline;">
+                    <input type="hidden" name="__RequestVerificationToken" id="rolSilToken" />
+                    <input type="hidden" id="silinecekRolID" name="id" />
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rol Detay Modal -->
+<div class="modal fade" id="rolDetayModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rol Detayları</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Rol Bilgileri</h6>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>Rol ID:</strong></td>
+                                <td id="detayRolID"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rol Adı:</strong></td>
+                                <td id="detayRolAdi"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Bu Role Sahip Kullanıcılar</h6>
+                        <div id="detayKullanicilar">
+                            <!-- Kullanıcı listesi buraya gelecek -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form validasyonu ve AntiForgeryToken
+    document.addEventListener('DOMContentLoaded', function() {
+        // AntiForgeryToken oluştur
+        function generateToken() {
+            return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        }
+        
+        // Form validasyonu
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+        
+        // Modal açıldığında token oluştur
+        $('#rolEkleModal').on('show.bs.modal', function() {
+            document.getElementById('rolEkleToken').value = generateToken();
+        });
+        
+        $('#rolDuzenleModal').on('show.bs.modal', function() {
+            document.getElementById('rolDuzenleToken').value = generateToken();
+        });
+        
+        $('#rolSilModal').on('show.bs.modal', function() {
+            document.getElementById('rolSilToken').value = generateToken();
+        });
+    });
+
+    // Rol düzenleme fonksiyonu
+    function rolDuzenle(rolID, rolAdi) {
+        document.getElementById('duzenleRolID').value = rolID;
+        document.getElementById('duzenleRolAdi').value = rolAdi;
+        $('#rolDuzenleModal').modal('show');
+    }
+
+    // Rol silme fonksiyonu
+    function rolSil(rolID, rolAdi) {
+        document.getElementById('silinecekRolID').value = rolID;
+        document.getElementById('silinecekRolAdi').textContent = rolAdi;
+        $('#rolSilModal').modal('show');
+    }
+
+    // Rol detay fonksiyonu
+    function rolDetay(rolID, rolAdi) {
+        document.getElementById('detayRolID').textContent = rolID;
+        document.getElementById('detayRolAdi').textContent = rolAdi;
+        
+        // AJAX ile kullanıcı listesini getir
+        fetch(`/Rol/Details/${rolID}`)
+            .then(response => response.text())
+            .then(html => {
+                // Kullanıcı listesini parse et ve göster
+                document.getElementById('detayKullanicilar').innerHTML = 
+                    '<p class="text-muted">Kullanıcı listesi yükleniyor...</p>';
+            })
+            .catch(error => {
+                document.getElementById('detayKullanicilar').innerHTML = 
+                    '<p class="text-danger">Kullanıcı listesi yüklenemedi.</p>';
+            });
+        
+        $('#rolDetayModal').modal('show');
+    }
+
+    // Modal kapandığında formları temizle
+    $('#rolEkleModal').on('hidden.bs.modal', function() {
+        document.getElementById('rolEkleForm').reset();
+    });
+
+    $('#rolDuzenleModal').on('hidden.bs.modal', function() {
+        document.getElementById('rolDuzenleForm').reset();
+    });
+</script> 

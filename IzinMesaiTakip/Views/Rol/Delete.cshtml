@@ -1,0 +1,111 @@
+@model IzinMesaiTakip.Models.Rol
+
+@{
+    ViewBag.Title = "Rol Sil";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0 text-danger">Rol Silme Onayı</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Uyarı:</strong> Bu rolü silmek istediğinizden emin misiniz?
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Rol Bilgileri</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Rol ID:</strong></td>
+                                    <td>@Model.RolID</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rol Adı:</strong></td>
+                                    <td>@Model.RolAdi</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kullanıcı Sayısı:</strong></td>
+                                    <td>@Model.Kullanici.Count</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            @if (Model.Kullanici.Count > 0)
+                            {
+                                <h6>Bu Role Sahip Kullanıcılar</h6>
+                                <div class="alert alert-info">
+                                    <ul class="list-unstyled mb-0">
+                                        @foreach (var kullanici in Model.Kullanici.Take(5))
+                                        {
+                                            <li><i class="fas fa-user"></i> @kullanici.Ad @kullanici.Soyad</li>
+                                        }
+                                        @if (Model.Kullanici.Count > 5)
+                                        {
+                                            <li><em>... ve @(Model.Kullanici.Count - 5) kullanıcı daha</em></li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Bu role sahip kullanıcı bulunmuyor.
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <form action="/Rol/Delete" method="post" id="rolDeleteForm">
+                            <input type="hidden" name="__RequestVerificationToken" id="antiForgeryToken" />
+                            <input type="hidden" name="id" value="@Model.RolID" />
+                            
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Evet, Sil
+                            </button>
+                            <a href="/Rol/Index" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> İptal
+                            </a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Silme işlemi öncesi son uyarı ve AntiForgeryToken
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('rolDeleteForm');
+        
+        // AntiForgeryToken oluştur
+        const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        document.getElementById('antiForgeryToken').value = token;
+        
+        form.addEventListener('submit', function(event) {
+            const kullaniciSayisi = @Model.Kullanici.Count;
+            
+            if (kullaniciSayisi > 0) {
+                const onay = confirm(`Bu role sahip ${kullaniciSayisi} kullanıcı bulunmaktadır. Bu rolü silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz!`);
+                if (!onay) {
+                    event.preventDefault();
+                    return false;
+                }
+            } else {
+                const onay = confirm('Bu rolü silmek istediğinizden emin misiniz?');
+                if (!onay) {
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        });
+    });
+</script> 

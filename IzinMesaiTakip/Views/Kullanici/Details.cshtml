@@ -1,0 +1,34 @@
+﻿@model IzinMesaiTakip.Models.Kullanici
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 bg-info">
+            <h6 class="m-0 font-weight-bold text-white">Kullanıcı Detayları</h6>
+        </div>
+        <div class="card-body">
+
+            <dl class="row">
+                <dt class="col-sm-3">Ad</dt>
+                <dd class="col-sm-9">@Model.Ad</dd>
+
+                <dt class="col-sm-3">Soyad</dt>
+                <dd class="col-sm-9">@Model.Soyad</dd>
+
+                <dt class="col-sm-3">E-posta</dt>
+                <dd class="col-sm-9">@Model.Eposta</dd>
+
+                <dt class="col-sm-3">Şifre</dt>
+                <dd class="col-sm-9">@Model.Sifre</dd>
+
+                <dt class="col-sm-3">Rol</dt>
+                <dd class="col-sm-9">@Model.Rol.RolAdi</dd>
+
+                <dt class="col-sm-3">Departman</dt>
+                <dd class="col-sm-9">@Model.Departman.DepartmanAdi</dd>
+            </dl>
+
+            <a href="/Kullanici/Edit/@Model.KullaniciID" class="btn btn-warning">Düzenle</a>
+            <a href="/Kullanici" class="btn btn-secondary">Listeye Dön</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+﻿@model List<IzinMesaiTakip.Models.Kullanici>
+
+@{
+    ViewBag.Title = "Yönetim Paneli";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Layout dosyanın yolunu kontrol et
+}
+
+<h2 class="mb-4">Yönetim Paneli</h2>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 bg-primary text-white">
+        <h6 class="m-0 font-weight-bold">Kullanıcı Listesi</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                                            <tr>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>Eposta</th>
+                            <th>Rol</th>
+                            <th>Departman</th>
+                        </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Ad</td>
+                            <td>@item.Soyad</td>
+                            <td>@item.Eposta</td>
+                            <td>@(item.Rol != null ? item.Rol.RolAdi : "-")</td>
+                            <td>@(item.Departman != null ? item.Departman.DepartmanAdi : "-")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

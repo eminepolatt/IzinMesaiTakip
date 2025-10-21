@@ -1,0 +1,64 @@
+@model IzinMesaiTakip.Models.Rol
+
+@{
+    ViewBag.Title = "Rol Düzenle";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Rol Düzenle</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/Rol/Edit" method="post" id="rolEditForm">
+                        <input type="hidden" name="__RequestVerificationToken" id="antiForgeryToken" />
+                        <input type="hidden" name="RolID" value="@Model.RolID" />
+                        
+                        <div class="form-group">
+                            <label for="rolAdi">Rol Adı</label>
+                            <input type="text" class="form-control" id="rolAdi" name="RolAdi" 
+                                   value="@Model.RolAdi" required maxlength="50" placeholder="Rol adını giriniz">
+                            <div class="invalid-feedback">
+                                Rol adı gereklidir ve 50 karakterden az olmalıdır.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Güncelle</button>
+                            <a href="/Rol/Index" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form validasyonu ve AntiForgeryToken
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('rolEditForm');
+        
+        // AntiForgeryToken oluştur
+        const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        document.getElementById('antiForgeryToken').value = token;
+        
+        form.addEventListener('submit', function(event) {
+            const rolAdi = document.getElementById('rolAdi').value.trim();
+            
+            if (!rolAdi) {
+                event.preventDefault();
+                alert('Rol adı gereklidir!');
+                return;
+            }
+            
+            if (rolAdi.length > 50) {
+                event.preventDefault();
+                alert('Rol adı 50 karakterden az olmalıdır!');
+                return;
+            }
+        });
+    });
+</script> 

@@ -1,0 +1,291 @@
+﻿@model IEnumerable<IzinMesaiTakip.Models.Izin>
+
+@{
+    ViewBag.Title = "İzin Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">İzin Listesi</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Tüm İzin Kayıtları</h6>
+            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#ekleModal">Yeni İzin Ekle</button>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>İzin Türü</th>
+                            <th>Başlangıç</th>
+                            <th>Bitiş</th>
+                            <th>Açıklama</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Kullanici.Ad @item.Kullanici.Soyad</td>
+                                <td>@item.IzinTur.TurAdi</td>
+                                <td>@(item.BaslangicTarih?.ToString("dd.MM.yyyy"))</td>
+                                <td>@(item.BitisTarih?.ToString("dd.MM.yyyy"))</td>
+                                <td>@item.Aciklama</td>
+                                <td>
+                                    @if (item.Durum == true)
+                                    {
+                                        <span class="badge badge-success">Onaylandı</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">Bekliyor</span>
+                                    }
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm btnDuzenle"
+                                            data-id="@item.IzinID">
+                                        Düzenle
+                                    </button>
+
+                                    <button class="btn btn-danger btn-sm btnSil"
+                                            data-id="@item.IzinID"
+                                            data-kullanici="@item.Kullanici.Ad">
+                                        Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ekle Modal -->
+<div class="modal fade" id="ekleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="ekleForm">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Yeni İzin Ekle</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <select name="KullaniciID" class="form-control mb-2" id="kullaniciSelectEkle" required>
+                        <option value="">Kullanıcı Seçin</option>
+                    </select>
+                    <select name="IzinTurID" class="form-control mb-2" id="izinTurSelectEkle" required>
+                        <option value="">İzin Türü Seçin</option>
+                    </select>
+                    <input type="date" name="BaslangicTarih" class="form-control mb-2" placeholder="Başlangıç Tarihi" required />
+                    <input type="date" name="BitisTarih" class="form-control mb-2" placeholder="Bitiş Tarihi" required />
+                    <textarea name="Aciklama" class="form-control mb-2" placeholder="Açıklama" rows="3"></textarea>
+                    <div class="form-check">
+                        <input type="checkbox" name="Durum" class="form-check-input" id="durumEkle" value="true" />
+                        <label class="form-check-label" for="durumEkle">Onaylandı</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Güncelle Modal -->
+<div class="modal fade" id="guncelleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="guncelleForm">
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title">İzin Güncelle</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="IzinID" id="izinID" />
+                    <select name="KullaniciID" id="kullaniciSelectGuncelle" class="form-control mb-2" required>
+                        <option value="">Kullanıcı Seçin</option>
+                    </select>
+                    <select name="IzinTurID" id="izinTurSelectGuncelle" class="form-control mb-2" required>
+                        <option value="">İzin Türü Seçin</option>
+                    </select>
+                    <input type="date" name="BaslangicTarih" id="baslangicTarih" class="form-control mb-2" placeholder="Başlangıç Tarihi" required />
+                    <input type="date" name="BitisTarih" id="bitisTarih" class="form-control mb-2" placeholder="Bitiş Tarihi" required />
+                    <textarea name="Aciklama" id="aciklama" class="form-control mb-2" placeholder="Açıklama" rows="3"></textarea>
+                    <div class="form-check">
+                        <input type="checkbox" name="Durum" class="form-check-input" id="durumGuncelle" value="true" />
+                        <label class="form-check-label" for="durumGuncelle">Onaylandı</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Sayfa yüklendiğinde dropdown'ları doldur
+            loadDropdowns();
+
+            // Ekle
+            $("#ekleForm").submit(function (e) {
+                e.preventDefault();
+                $.post("/Izin/Create", $(this).serialize(), function (result) {
+                    if (result.success) {
+                        $("#ekleModal").modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Ekleme hatası: " + (result.message || "Bilinmeyen hata"));
+                    }
+                }).fail(function () {
+                    alert("Ekleme hatası.");
+                });
+            });
+
+            // Güncelle
+            $("#guncelleForm").submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/Izin/Edit',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        if (result.success) {
+                            $("#guncelleModal").modal('hide');
+                            location.reload();
+                        } else {
+                            alert("Güncelleme hatası: " + (result.message || "Bilinmeyen hata"));
+                        }
+                    },
+                    error: function () {
+                        alert("Güncelleme hatası.");
+                    }
+                });
+            });
+
+            // Sil
+            $(document).on("click", ".btnSil", function () {
+                let id = $(this).data("id");
+                let kullanici = $(this).data("kullanici");
+                let token = $('input[name="__RequestVerificationToken"]').val();
+
+                if (confirm(kullanici + " adlı kullanıcının izin kaydı silinsin mi?")) {
+                    $.ajax({
+                        url: '/Izin/DeleteConfirmed',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            __RequestVerificationToken: token
+                        },
+                        success: function (result) {
+                            if (result.success) {
+                                location.reload();
+                            } else {
+                                alert(result.message || "Silme başarısız.");
+                            }
+                        },
+                        error: function () {
+                            alert("Silme hatası.");
+                        }
+                    });
+                }
+            });
+
+            // Güncelle butonuna tıklanınca
+            $(document).on("click", ".btnDuzenle", function () {
+                var id = $(this).data("id");
+
+                // İzin bilgilerini çek
+                $.ajax({
+                    url: '/Izin/Edit/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        if (data) {
+                            $("#izinID").val(data.IzinID);
+                            $("#baslangicTarih").val(data.BaslangicTarih);
+                            $("#bitisTarih").val(data.BitisTarih);
+                            $("#aciklama").val(data.Aciklama);
+                            $("#durumGuncelle").prop('checked', data.Durum);
+
+                            // Kullanıcı dropdown'u doldur
+                            $.get('/Izin/KullaniciListele', function (kullanicilar) {
+                                var kullaniciSelect = $("#kullaniciSelectGuncelle");
+                                kullaniciSelect.empty();
+                                kullaniciSelect.append('<option value="">Kullanıcı Seçin</option>');
+                                $.each(kullanicilar, function (i, kullanici) {
+                                    kullaniciSelect.append($('<option>', {
+                                        value: kullanici.KullaniciID,
+                                        text: kullanici.AdSoyad,
+                                        selected: kullanici.KullaniciID === data.KullaniciID
+                                    }));
+                                });
+                            });
+
+                            // İzin türü dropdown'u doldur
+                            $.get('/Izin/IzinTurListele', function (izinTurleri) {
+                                var izinTurSelect = $("#izinTurSelectGuncelle");
+                                izinTurSelect.empty();
+                                izinTurSelect.append('<option value="">İzin Türü Seçin</option>');
+                                $.each(izinTurleri, function (i, izinTur) {
+                                    izinTurSelect.append($('<option>', {
+                                        value: izinTur.IzinTurID,
+                                        text: izinTur.TurAdi,
+                                        selected: izinTur.IzinTurID === data.IzinTurID
+                                    }));
+                                });
+                            });
+
+                            $("#guncelleModal").modal("show");
+                        }
+                    },
+                    error: function () {
+                        alert("İzin bilgileri alınamadı.");
+                    }
+                });
+            });
+
+            function loadDropdowns() {
+                // Kullanıcı dropdown'larını doldur
+                $.get('/Izin/KullaniciListele', function (kullanicilar) {
+                    var kullaniciSelectEkle = $("#kullaniciSelectEkle");
+                    kullaniciSelectEkle.empty();
+                    kullaniciSelectEkle.append('<option value="">Kullanıcı Seçin</option>');
+                    $.each(kullanicilar, function (i, kullanici) {
+                        kullaniciSelectEkle.append($('<option>', {
+                            value: kullanici.KullaniciID,
+                            text: kullanici.AdSoyad
+                        }));
+                    });
+                });
+
+                // İzin türü dropdown'larını doldur
+                $.get('/Izin/IzinTurListele', function (izinTurleri) {
+                    var izinTurSelectEkle = $("#izinTurSelectEkle");
+                    izinTurSelectEkle.empty();
+                    izinTurSelectEkle.append('<option value="">İzin Türü Seçin</option>');
+                    $.each(izinTurleri, function (i, izinTur) {
+                        izinTurSelectEkle.append($('<option>', {
+                            value: izinTur.IzinTurID,
+                            text: izinTur.TurAdi
+                        }));
+                    });
+                });
+            }
+        });
+    </script>
+}

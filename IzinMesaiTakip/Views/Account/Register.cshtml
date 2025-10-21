@@ -1,0 +1,163 @@
+@{
+    ViewBag.Title = "Kayıt Ol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .register-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    
+    .register-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        padding: 40px;
+        max-width: 450px;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .logo-container {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .logo-icon {
+        width: 50px;
+        height: 50px;
+        fill: white;
+    }
+    
+    .register-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        padding: 12px 20px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .btn-register {
+        background: #28a745;
+        border: none;
+        border-radius: 25px;
+        padding: 12px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-register:hover {
+        background: #218838;
+        transform: translateY(-2px);
+    }
+    
+    .back-link {
+        color: #667eea;
+        text-decoration: none;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+    
+    .back-link:hover {
+        color: #5a6fd8;
+        text-decoration: none;
+    }
+    
+    .login-link {
+        color: #667eea;
+        text-decoration: none;
+        font-size: 14px;
+        margin-top: 20px;
+        display: inline-block;
+    }
+    
+    .login-link:hover {
+        color: #5a6fd8;
+        text-decoration: none;
+    }
+    
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="register-container">
+    <div class="register-card">
+        <div class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 24 24">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                <circle cx="12" cy="12" r="3" fill="none" stroke="white" stroke-width="2"/>
+                <path d="M12 9v3l2 2" stroke="white" stroke-width="2" fill="none"/>
+            </svg>
+        </div>
+        
+        <h1 class="register-title">Kayıt Ol</h1>
+        
+        <a href="javascript:history.back()" class="back-link">← Geri Dön</a>
+        
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            
+            <div class="form-group">
+                <input type="text" name="ad" class="form-control" placeholder="Ad" required />
+            </div>
+            
+            <div class="form-group">
+                <input type="text" name="soyad" class="form-control" placeholder="Soyad" required />
+            </div>
+            
+            <div class="form-group">
+                <input type="email" name="email" class="form-control" placeholder="E-posta Adresi" required />
+            </div>
+            
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Şifre" required />
+            </div>
+            
+            <button type="submit" class="btn btn-register">
+                Kayıt Ol
+            </button>
+        }
+        
+        <a href="@Url.Action("Login", "Account")" class="login-link">Zaten hesabın var mı? Giriş yap</a>
+    </div>
+</div>

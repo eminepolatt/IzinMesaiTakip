@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="IzinMesaiTakipModelStoreContainer" CdmEntityContainer="IzinMesaiTakipEntities">
+    <EntitySetMapping Name="Departman">
+      <EntityTypeMapping TypeName="IzinMesaiTakipModel.Departman">
+        <MappingFragment StoreEntitySet="Departman">
+          <ScalarProperty Name="DepartmanID" ColumnName="DepartmanID" />
+          <ScalarProperty Name="DepartmanAdi" ColumnName="DepartmanAdi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FazlaMesai">
+      <EntityTypeMapping TypeName="IzinMesaiTakipModel.FazlaMesai">
+        <MappingFragment StoreEntitySet="FazlaMesai">
+          <ScalarProperty Name="MesaiID" ColumnName="MesaiID" />
+          <ScalarProperty Name="KullaniciID" ColumnName="KullaniciID" />
+          <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+          <ScalarProperty Name="Saat" ColumnName="Saat" />
+          <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+          <ScalarProperty Name="Durum" ColumnName="Durum" />
+          <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Izin">
+      <EntityTypeMapping TypeName="IzinMesaiTakipModel.Izin">
+        <MappingFragment StoreEntitySet="Izin">
+          <ScalarProperty Name="DurumBit" ColumnName="DurumBit" />
+          <ScalarProperty Name="DurumTemp" ColumnName="DurumTemp" />
+          <ScalarProperty Name="IzinID" ColumnName="IzinID" />
+          <ScalarProperty Name="KullaniciID" ColumnName="KullaniciID" />
+          <ScalarProperty Name="IzinTurID" ColumnName="IzinTurID" />
+          <ScalarProperty Name="BaslangicTarih" ColumnName="BaslangicTarih" />
+          <ScalarProperty Name="BitisTarih" ColumnName="BitisTarih" />
+          <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+          <ScalarProperty Name="Durum" ColumnName="Durum" />
+          <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IzinTur">
+      <EntityTypeMapping TypeName="IzinMesaiTakipModel.IzinTur">
+        <MappingFragment StoreEntitySet="IzinTur">
+          <ScalarProperty Name="IzinTurID" ColumnName="IzinTurID" />
+          <ScalarProperty Name="TurAdi" ColumnName="TurAdi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Kullanici">
+      <EntityTypeMapping TypeName="IzinMesaiTakipModel.Kullanici">
+        <MappingFragment StoreEntitySet="Kullanici">
+          <ScalarProperty Name="KullaniciID" ColumnName="KullaniciID" />
+          <ScalarProperty Name="Ad" ColumnName="Ad" />
+          <ScalarProperty Name="Soyad" ColumnName="Soyad" />
+          <ScalarProperty Name="Eposta" ColumnName="Eposta" />
+          <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+          <ScalarProperty Name="RolID" ColumnName="RolID" />
+          <ScalarProperty Name="DepartmanID" ColumnName="DepartmanID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rol">
+      <EntityTypeMapping TypeName="IzinMesaiTakipModel.Rol">
+        <MappingFragment StoreEntitySet="Rol">
+          <ScalarProperty Name="RolID" ColumnName="RolID" />
+          <ScalarProperty Name="RolAdi" ColumnName="RolAdi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,36 @@
+﻿@model IzinMesaiTakip.Models.FazlaMesai
+@{
+    ViewBag.Title = "Fazla Mesai Detayı";
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Fazla Mesai Detayları</h6>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Kullanıcı</dt>
+                <dd class="col-sm-9">@Model.Kullanici.Ad @Model.Kullanici.Soyad</dd>
+
+                <dt class="col-sm-3">Tarih</dt>
+                <dd class="col-sm-9">@(Model.Tarih?.ToString("dd.MM.yyyy"))</dd>
+
+                <dt class="col-sm-3">Saat</dt>
+                <dd class="col-sm-9">@Model.Saat</dd>
+
+                <dt class="col-sm-3">Açıklama</dt>
+                <dd class="col-sm-9">@Model.Aciklama</dd>
+
+                <dt class="col-sm-3">Durum</dt>
+                <dd class="col-sm-9">@Model.Durum</dd>
+
+                <dt class="col-sm-3">Oluşturma Tarihi</dt>
+                <dd class="col-sm-9">@(Model.OlusturmaTarihi?.ToString("dd.MM.yyyy"))</dd>
+            </dl>
+
+            <a href="/FazlaMesai/Edit/@Model.MesaiID" class="btn btn-primary">Düzenle</a>
+            <a href="/FazlaMesai/Index" class="btn btn-secondary">Listeye Dön</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Ana Sayfa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Ana Sayfa</h1>
+
+    <div class="row">
+        <!-- Toplam Kullanıcı -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <h5 class="font-weight-bold text-primary">Toplam Kullanıcı</h5>
+                    <p class="text-gray-800">@ViewBag.KullaniciSayisi kişi</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toplam İzin -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <h5 class="font-weight-bold text-success">Toplam İzin</h5>
+                    <p class="text-gray-800">@ViewBag.IzinSayisi kayıt</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toplam Fazla Mesai -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <h5 class="font-weight-bold text-warning">Toplam Fazla Mesai</h5>
+                    <p class="text-gray-800">@ViewBag.MesaiSaati saat</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <h5>📋 Hoş Geldiniz!</h5>
+            <p>Bu sistem ile kullanıcı yönetimi, izin ve fazla mesai işlemlerinizi kolayca takip edebilirsiniz.</p>
+        </div>
+    </div>
+</div>

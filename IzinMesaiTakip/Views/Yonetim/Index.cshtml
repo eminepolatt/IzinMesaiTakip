@@ -1,0 +1,48 @@
+﻿@model List<IzinMesaiTakip.Models.Kullanici>
+
+@{
+    ViewBag.Title = "Yönetim Paneli";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <h2 class="mb-4 text-gray-800">Yönetim Paneli</h2>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 bg-primary text-white">
+            <h6 class="m-0 font-weight-bold">Kullanıcı Listesi</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Departman</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Ad</td>
+                                <td>@item.Soyad</td>
+                                <td>@item.Eposta</td>
+                                <td>@(item.Rol != null ? item.Rol.RolAdi : "-")</td>
+                                <td>@(item.Departman != null ? item.Departman.DepartmanAdi : "-")</td>
+
+                                <td>
+                                    <a href="@Url.Action("Edit", "Yonetim", new { id = item.KullaniciID })" class="btn btn-sm btn-warning">Düzenle</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

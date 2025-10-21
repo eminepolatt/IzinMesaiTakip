@@ -1,0 +1,266 @@
+﻿@model IEnumerable<IzinMesaiTakip.Models.FazlaMesai>
+
+@{
+    ViewBag.Title = "Fazla Mesai Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Fazla Mesai Listesi</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Fazla Mesai Kayıtları</h6>
+            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#ekleModal">Yeni Kayıt</button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Tarih</th>
+                            <th>Saat</th>
+                            <th>Açıklama</th>
+                            <th>Durum</th>
+                            <th>Oluşturma</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@($"{item.Kullanici?.Ad} {item.Kullanici?.Soyad}")</td>
+                                <td>@(item.Tarih?.ToString("dd.MM.yyyy"))</td>
+                                <td>@item.Saat</td>
+                                <td>@item.Aciklama</td>
+                                <td>
+                                    @if (item.Durum == true)
+                                    {
+                                        <span class="badge badge-success">Onaylandı</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">Bekliyor</span>
+                                    }
+                                </td>
+                                <td>@(item.OlusturmaTarihi?.ToString("dd.MM.yyyy"))</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm btnDuzenle"
+                                            data-id="@item.MesaiID">
+                                        Düzenle
+                                    </button>
+
+                                    <button class="btn btn-danger btn-sm btnSil"
+                                            data-id="@item.MesaiID"
+                                            data-kullanici="@item.Kullanici?.Ad">
+                                        Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ekle Modal -->
+<div class="modal fade" id="ekleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="ekleForm">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Yeni Fazla Mesai Ekle</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <select name="KullaniciID" class="form-control mb-2" id="kullaniciSelectEkle" required>
+                        <option value="">Kullanıcı Seçin</option>
+                    </select>
+                    <input type="date" name="Tarih" class="form-control mb-2" placeholder="Tarih" required />
+                    <input type="text" name="Saat" class="form-control mb-2" placeholder="Saat (örn: 2.5)" pattern="[0-9]+([.,][0-9]+)?" required />
+                    <textarea name="Aciklama" class="form-control mb-2" placeholder="Açıklama" rows="3"></textarea>
+                    <div class="form-check">
+                        <input type="checkbox" name="Durum" class="form-check-input" id="durumEkle" value="true" />
+                        <label class="form-check-label" for="durumEkle">Onaylandı</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Güncelle Modal -->
+<div class="modal fade" id="guncelleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="guncelleForm">
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title">Fazla Mesai Güncelle</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="MesaiID" id="mesaiID" />
+                    <select name="KullaniciID" id="kullaniciSelectGuncelle" class="form-control mb-2" required>
+                        <option value="">Kullanıcı Seçin</option>
+                    </select>
+                    <input type="date" name="Tarih" id="tarih" class="form-control mb-2" placeholder="Tarih" required />
+                    <input type="text" name="Saat" id="saat" class="form-control mb-2" placeholder="Saat (örn: 2.5)" pattern="[0-9]+([.,][0-9]+)?" required />
+                    <textarea name="Aciklama" id="aciklama" class="form-control mb-2" placeholder="Açıklama" rows="3"></textarea>
+                    <div class="form-check">
+                        <input type="checkbox" name="Durum" class="form-check-input" id="durumGuncelle" value="true" />
+                        <label class="form-check-label" for="durumGuncelle">Onaylandı</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Sayfa yüklendiğinde dropdown'ları doldur
+            loadDropdowns();
+
+            // Ekle
+            $("#ekleForm").submit(function (e) {
+                e.preventDefault();
+                
+                $.post("/FazlaMesai/Create", $(this).serialize(), function (result) {
+                    if (result.success) {
+                        $("#ekleModal").modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Ekleme hatası: " + (result.message || "Bilinmeyen hata"));
+                    }
+                }).fail(function () {
+                    alert("Ekleme hatası.");
+                });
+            });
+
+            // Güncelle
+            $("#guncelleForm").submit(function (e) {
+                e.preventDefault();
+                
+                $.ajax({
+                    url: '/FazlaMesai/Edit',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        if (result.success) {
+                            $("#guncelleModal").modal('hide');
+                            location.reload();
+                        } else {
+                            alert("Güncelleme hatası: " + (result.message || "Bilinmeyen hata"));
+                        }
+                    },
+                    error: function () {
+                        alert("Güncelleme hatası.");
+                    }
+                });
+            });
+
+            // Sil
+            $(document).on("click", ".btnSil", function () {
+                let id = $(this).data("id");
+                let kullanici = $(this).data("kullanici");
+                let token = $('input[name="__RequestVerificationToken"]').val();
+
+                if (confirm(kullanici + " adlı kullanıcının fazla mesai kaydı silinsin mi?")) {
+                    $.ajax({
+                        url: '/FazlaMesai/DeleteConfirmed',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            __RequestVerificationToken: token
+                        },
+                        success: function (result) {
+                            if (result.success) {
+                                location.reload();
+                            } else {
+                                alert(result.message || "Silme başarısız.");
+                            }
+                        },
+                        error: function () {
+                            alert("Silme hatası.");
+                        }
+                    });
+                }
+            });
+
+            // Güncelle butonuna tıklanınca
+            $(document).on("click", ".btnDuzenle", function () {
+                var id = $(this).data("id");
+
+                // Fazla mesai bilgilerini çek
+                $.ajax({
+                    url: '/FazlaMesai/Edit/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        if (data) {
+                            console.log("Gelen veri:", data);
+                            $("#mesaiID").val(data.MesaiID);
+                            $("#tarih").val(data.Tarih || '');
+                            // Saat değerini doğru formatta göster
+                            var saatValue = data.Saat || '';
+                            if (saatValue) {
+                                // Nokta ile gelen değeri virgül ile göster
+                                saatValue = saatValue.replace('.', ',');
+                            }
+                            $("#saat").val(saatValue);
+                            $("#aciklama").val(data.Aciklama || '');
+                            $("#durumGuncelle").prop('checked', data.Durum || false);
+
+                            // Kullanıcı dropdown'u doldur
+                            $.get('/FazlaMesai/KullaniciListele', function (kullanicilar) {
+                                var kullaniciSelect = $("#kullaniciSelectGuncelle");
+                                kullaniciSelect.empty();
+                                kullaniciSelect.append('<option value="">Kullanıcı Seçin</option>');
+                                $.each(kullanicilar, function (i, kullanici) {
+                                    kullaniciSelect.append($('<option>', {
+                                        value: kullanici.KullaniciID,
+                                        text: kullanici.AdSoyad,
+                                        selected: kullanici.KullaniciID === data.KullaniciID
+                                    }));
+                                });
+                            });
+
+                            $("#guncelleModal").modal("show");
+                        }
+                    },
+                    error: function () {
+                        alert("Fazla mesai bilgileri alınamadı.");
+                    }
+                });
+            });
+
+            function loadDropdowns() {
+                // Kullanıcı dropdown'larını doldur
+                $.get('/FazlaMesai/KullaniciListele', function (kullanicilar) {
+                    var kullaniciSelectEkle = $("#kullaniciSelectEkle");
+                    kullaniciSelectEkle.empty();
+                    kullaniciSelectEkle.append('<option value="">Kullanıcı Seçin</option>');
+                    $.each(kullanicilar, function (i, kullanici) {
+                        kullaniciSelectEkle.append($('<option>', {
+                            value: kullanici.KullaniciID,
+                            text: kullanici.AdSoyad
+                        }));
+                    });
+                });
+            }
+        });
+    </script>
+}

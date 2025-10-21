@@ -1,0 +1,413 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IzinMesaiTakipModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Departman">
+          <Key>
+            <PropertyRef Name="DepartmanID" />
+          </Key>
+          <Property Name="DepartmanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmanAdi" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="FazlaMesai">
+          <Key>
+            <PropertyRef Name="MesaiID" />
+          </Key>
+          <Property Name="MesaiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KullaniciID" Type="int" />
+          <Property Name="Tarih" Type="date" />
+          <Property Name="Saat" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="Aciklama" Type="nvarchar" MaxLength="500" />
+          <Property Name="Durum" Type="bit" />
+          <Property Name="OlusturmaTarihi" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Izin">
+          <Key>
+            <PropertyRef Name="IzinID" />
+          </Key>
+          <Property Name="IzinID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KullaniciID" Type="int" />
+          <Property Name="IzinTurID" Type="int" />
+          <Property Name="BaslangicTarih" Type="date" />
+          <Property Name="BitisTarih" Type="date" />
+          <Property Name="Aciklama" Type="nvarchar" MaxLength="500" />
+          <Property Name="Durum" Type="bit" />
+          <Property Name="OlusturmaTarihi" Type="datetime" />
+          <Property Name="DurumTemp" Type="bit" />
+          <Property Name="DurumBit" Type="bit" />
+        </EntityType>
+        <EntityType Name="IzinTur">
+          <Key>
+            <PropertyRef Name="IzinTurID" />
+          </Key>
+          <Property Name="IzinTurID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TurAdi" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Kullanici">
+          <Key>
+            <PropertyRef Name="KullaniciID" />
+          </Key>
+          <Property Name="KullaniciID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ad" Type="nvarchar" MaxLength="100" />
+          <Property Name="Soyad" Type="nvarchar" MaxLength="100" />
+          <Property Name="Eposta" Type="nvarchar" MaxLength="100" />
+          <Property Name="Sifre" Type="nvarchar" MaxLength="100" />
+          <Property Name="RolID" Type="int" />
+          <Property Name="DepartmanID" Type="int" />
+        </EntityType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="RolID" />
+          </Key>
+          <Property Name="RolID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RolAdi" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__FazlaMesa__Kulla__32E0915F">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="FazlaMesai" Type="Self.FazlaMesai" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciID" />
+            </Principal>
+            <Dependent Role="FazlaMesai">
+              <PropertyRef Name="KullaniciID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Izin__IzinTurID__2F10007B">
+          <End Role="IzinTur" Type="Self.IzinTur" Multiplicity="0..1" />
+          <End Role="Izin" Type="Self.Izin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IzinTur">
+              <PropertyRef Name="IzinTurID" />
+            </Principal>
+            <Dependent Role="Izin">
+              <PropertyRef Name="IzinTurID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Izin__KullaniciI__2E1BDC42">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="Izin" Type="Self.Izin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciID" />
+            </Principal>
+            <Dependent Role="Izin">
+              <PropertyRef Name="KullaniciID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Kullanici__Depar__29572725">
+          <End Role="Departman" Type="Self.Departman" Multiplicity="0..1" />
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departman">
+              <PropertyRef Name="DepartmanID" />
+            </Principal>
+            <Dependent Role="Kullanici">
+              <PropertyRef Name="DepartmanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Kullanici__RolID__286302EC">
+          <End Role="Rol" Type="Self.Rol" Multiplicity="0..1" />
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="RolID" />
+            </Principal>
+            <Dependent Role="Kullanici">
+              <PropertyRef Name="RolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IzinMesaiTakipModelStoreContainer">
+          <EntitySet Name="Departman" EntityType="Self.Departman" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FazlaMesai" EntityType="Self.FazlaMesai" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Izin" EntityType="Self.Izin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IzinTur" EntityType="Self.IzinTur" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kullanici" EntityType="Self.Kullanici" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__FazlaMesa__Kulla__32E0915F" Association="Self.FK__FazlaMesa__Kulla__32E0915F">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="FazlaMesai" EntitySet="FazlaMesai" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Izin__IzinTurID__2F10007B" Association="Self.FK__Izin__IzinTurID__2F10007B">
+            <End Role="IzinTur" EntitySet="IzinTur" />
+            <End Role="Izin" EntitySet="Izin" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Izin__KullaniciI__2E1BDC42" Association="Self.FK__Izin__KullaniciI__2E1BDC42">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="Izin" EntitySet="Izin" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Kullanici__Depar__29572725" Association="Self.FK__Kullanici__Depar__29572725">
+            <End Role="Departman" EntitySet="Departman" />
+            <End Role="Kullanici" EntitySet="Kullanici" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Kullanici__RolID__286302EC" Association="Self.FK__Kullanici__RolID__286302EC">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="Kullanici" EntitySet="Kullanici" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IzinMesaiTakipModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Departman">
+          <Key>
+            <PropertyRef Name="DepartmanID" />
+          </Key>
+          <Property Name="DepartmanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmanAdi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK__Kullanici__Depar__29572725" FromRole="Departman" ToRole="Kullanici" />
+        </EntityType>
+        <EntityType Name="FazlaMesai">
+          <Key>
+            <PropertyRef Name="MesaiID" />
+          </Key>
+          <Property Name="MesaiID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KullaniciID" Type="Int32" />
+          <Property Name="Tarih" Type="DateTime" Precision="0" />
+          <Property Name="Saat" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="Aciklama" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Durum" Type="Boolean" />
+          <Property Name="OlusturmaTarihi" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK__FazlaMesa__Kulla__32E0915F" FromRole="FazlaMesai" ToRole="Kullanici" />
+        </EntityType>
+        <EntityType Name="Izin">
+          <Key>
+            <PropertyRef Name="IzinID" />
+          </Key>
+          <Property Name="IzinID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KullaniciID" Type="Int32" />
+          <Property Name="IzinTurID" Type="Int32" />
+          <Property Name="BaslangicTarih" Type="DateTime" Precision="0" />
+          <Property Name="BitisTarih" Type="DateTime" Precision="0" />
+          <Property Name="Aciklama" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Durum" Type="Boolean" />
+          <Property Name="OlusturmaTarihi" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="IzinTur" Relationship="Self.FK__Izin__IzinTurID__2F10007B" FromRole="Izin" ToRole="IzinTur" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK__Izin__KullaniciI__2E1BDC42" FromRole="Izin" ToRole="Kullanici" />
+          <Property Name="DurumTemp" Type="Boolean" />
+          <Property Name="DurumBit" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="IzinTur">
+          <Key>
+            <PropertyRef Name="IzinTurID" />
+          </Key>
+          <Property Name="IzinTurID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TurAdi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Izin" Relationship="Self.FK__Izin__IzinTurID__2F10007B" FromRole="IzinTur" ToRole="Izin" />
+        </EntityType>
+        <EntityType Name="Kullanici">
+          <Key>
+            <PropertyRef Name="KullaniciID" />
+          </Key>
+          <Property Name="KullaniciID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ad" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Soyad" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Eposta" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Sifre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RolID" Type="Int32" />
+          <Property Name="DepartmanID" Type="Int32" />
+          <NavigationProperty Name="Departman" Relationship="Self.FK__Kullanici__Depar__29572725" FromRole="Kullanici" ToRole="Departman" />
+          <NavigationProperty Name="FazlaMesai" Relationship="Self.FK__FazlaMesa__Kulla__32E0915F" FromRole="Kullanici" ToRole="FazlaMesai" />
+          <NavigationProperty Name="Izin" Relationship="Self.FK__Izin__KullaniciI__2E1BDC42" FromRole="Kullanici" ToRole="Izin" />
+          <NavigationProperty Name="Rol" Relationship="Self.FK__Kullanici__RolID__286302EC" FromRole="Kullanici" ToRole="Rol" />
+        </EntityType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="RolID" />
+          </Key>
+          <Property Name="RolID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RolAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK__Kullanici__RolID__286302EC" FromRole="Rol" ToRole="Kullanici" />
+        </EntityType>
+        <Association Name="FK__Kullanici__Depar__29572725">
+          <End Role="Departman" Type="Self.Departman" Multiplicity="0..1" />
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departman">
+              <PropertyRef Name="DepartmanID" />
+            </Principal>
+            <Dependent Role="Kullanici">
+              <PropertyRef Name="DepartmanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FazlaMesa__Kulla__32E0915F">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="FazlaMesai" Type="Self.FazlaMesai" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciID" />
+            </Principal>
+            <Dependent Role="FazlaMesai">
+              <PropertyRef Name="KullaniciID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Izin__IzinTurID__2F10007B">
+          <End Role="IzinTur" Type="Self.IzinTur" Multiplicity="0..1" />
+          <End Role="Izin" Type="Self.Izin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IzinTur">
+              <PropertyRef Name="IzinTurID" />
+            </Principal>
+            <Dependent Role="Izin">
+              <PropertyRef Name="IzinTurID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Izin__KullaniciI__2E1BDC42">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="Izin" Type="Self.Izin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciID" />
+            </Principal>
+            <Dependent Role="Izin">
+              <PropertyRef Name="KullaniciID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Kullanici__RolID__286302EC">
+          <End Role="Rol" Type="Self.Rol" Multiplicity="0..1" />
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="RolID" />
+            </Principal>
+            <Dependent Role="Kullanici">
+              <PropertyRef Name="RolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IzinMesaiTakipEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Departman" EntityType="Self.Departman" />
+          <EntitySet Name="FazlaMesai" EntityType="Self.FazlaMesai" />
+          <EntitySet Name="Izin" EntityType="Self.Izin" />
+          <EntitySet Name="IzinTur" EntityType="Self.IzinTur" />
+          <EntitySet Name="Kullanici" EntityType="Self.Kullanici" />
+          <EntitySet Name="Rol" EntityType="Self.Rol" />
+          <AssociationSet Name="FK__Kullanici__Depar__29572725" Association="Self.FK__Kullanici__Depar__29572725">
+            <End Role="Departman" EntitySet="Departman" />
+            <End Role="Kullanici" EntitySet="Kullanici" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FazlaMesa__Kulla__32E0915F" Association="Self.FK__FazlaMesa__Kulla__32E0915F">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="FazlaMesai" EntitySet="FazlaMesai" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Izin__IzinTurID__2F10007B" Association="Self.FK__Izin__IzinTurID__2F10007B">
+            <End Role="IzinTur" EntitySet="IzinTur" />
+            <End Role="Izin" EntitySet="Izin" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Izin__KullaniciI__2E1BDC42" Association="Self.FK__Izin__KullaniciI__2E1BDC42">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="Izin" EntitySet="Izin" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Kullanici__RolID__286302EC" Association="Self.FK__Kullanici__RolID__286302EC">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="Kullanici" EntitySet="Kullanici" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IzinMesaiTakipModelStoreContainer" CdmEntityContainer="IzinMesaiTakipEntities">
+          <EntitySetMapping Name="Departman">
+            <EntityTypeMapping TypeName="IzinMesaiTakipModel.Departman">
+              <MappingFragment StoreEntitySet="Departman">
+                <ScalarProperty Name="DepartmanID" ColumnName="DepartmanID" />
+                <ScalarProperty Name="DepartmanAdi" ColumnName="DepartmanAdi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FazlaMesai">
+            <EntityTypeMapping TypeName="IzinMesaiTakipModel.FazlaMesai">
+              <MappingFragment StoreEntitySet="FazlaMesai">
+                <ScalarProperty Name="MesaiID" ColumnName="MesaiID" />
+                <ScalarProperty Name="KullaniciID" ColumnName="KullaniciID" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Saat" ColumnName="Saat" />
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Izin">
+            <EntityTypeMapping TypeName="IzinMesaiTakipModel.Izin">
+              <MappingFragment StoreEntitySet="Izin">
+                <ScalarProperty Name="DurumBit" ColumnName="DurumBit" />
+                <ScalarProperty Name="DurumTemp" ColumnName="DurumTemp" />
+                <ScalarProperty Name="IzinID" ColumnName="IzinID" />
+                <ScalarProperty Name="KullaniciID" ColumnName="KullaniciID" />
+                <ScalarProperty Name="IzinTurID" ColumnName="IzinTurID" />
+                <ScalarProperty Name="BaslangicTarih" ColumnName="BaslangicTarih" />
+                <ScalarProperty Name="BitisTarih" ColumnName="BitisTarih" />
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IzinTur">
+            <EntityTypeMapping TypeName="IzinMesaiTakipModel.IzinTur">
+              <MappingFragment StoreEntitySet="IzinTur">
+                <ScalarProperty Name="IzinTurID" ColumnName="IzinTurID" />
+                <ScalarProperty Name="TurAdi" ColumnName="TurAdi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kullanici">
+            <EntityTypeMapping TypeName="IzinMesaiTakipModel.Kullanici">
+              <MappingFragment StoreEntitySet="Kullanici">
+                <ScalarProperty Name="KullaniciID" ColumnName="KullaniciID" />
+                <ScalarProperty Name="Ad" ColumnName="Ad" />
+                <ScalarProperty Name="Soyad" ColumnName="Soyad" />
+                <ScalarProperty Name="Eposta" ColumnName="Eposta" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+                <ScalarProperty Name="RolID" ColumnName="RolID" />
+                <ScalarProperty Name="DepartmanID" ColumnName="DepartmanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rol">
+            <EntityTypeMapping TypeName="IzinMesaiTakipModel.Rol">
+              <MappingFragment StoreEntitySet="Rol">
+                <ScalarProperty Name="RolID" ColumnName="RolID" />
+                <ScalarProperty Name="RolAdi" ColumnName="RolAdi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
