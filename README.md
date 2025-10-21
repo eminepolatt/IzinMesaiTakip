@@ -1,4 +1,4 @@
-echo "# IzinMesaiTakip
+ # IzinMesaiTakip
 
 Bu proje, ASP.NET MVC teknolojisi kullanılarak geliştirilen bir **İzin ve Mesai Takip Sistemi**dir.
 
@@ -18,5 +18,6 @@ Veritabanı için `SQLQuery1.sql` vb. dosyalarla tabloları oluşturabilirsiniz.
 [Emine Polat](https://github.com/eminepolatt)
 
 " > README.md
+
 
 
